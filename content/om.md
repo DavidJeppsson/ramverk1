@@ -17,5 +17,4 @@ views:
                 route: block/om-redovisa
 ---
 
-Detta är en del av kursen  [ramverk1](https://dbwebb.se/kurser/ramverk1-v2).
-GitHub [repo](https://github.com/DavidJeppsson/ramverk1).
+Denna sida är skapad som en del av kursen [ramverk1](https://dbwebb.se/kurser/ramverk1-v2).
