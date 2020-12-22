@@ -29,6 +29,32 @@ class NewController implements ContainerInjectableInterface
      */
     private $db = "not active";
 
+    /**
+    * This is a general helper method.
+    */
+
+    public function getDetailsOnRequest(
+        string $method,
+        array $args = []
+    ) : string
+    {
+        $request        = $this->di->get("request");
+        $path           = $request->getRoute();
+        $httpMethod     = $request->getMethod();
+        $numArgs        = count($args);
+        $strArgs        = implode(", ", $args);
+        $queryString    = http_build_query($request->getGet(), '', ', ');
+
+        return <<<EOD
+            <h1>$method</h1>
+
+            <p> The request was '$path' ($httpMethod).
+            <p> Got '$numArgs' arguments: '$strArgs'.
+            <p> Query string contains: '$queryString'.
+            <p>\$db is '{$this->db}'.
+            EOD;
+    }
+
 
 
     /**
@@ -212,8 +238,14 @@ class NewController implements ContainerInjectableInterface
      */
     public function catchAll(...$args)
     {
-        // Deal with the request and send an actual response, or not.
-        //return __METHOD__ . ", \$db is {$this->db}, got '" . count($args) . "' arguments: " . implode(", ", $args);
-        return;
+        $page = $this->di->get("page");
+        $data = [
+            "content" => $this->getDetailsOnRequest(__METHOD__, $args),
+        ];
+        $page->add("anax/v2/article/default", $data);
+
+        return $page->render([
+            "title" => __METHOD__,
+        ]);
     }
 }
